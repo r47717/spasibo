@@ -1,0 +1,11 @@
+@import url(/css/layout.css);
+
+.product-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.product-table td,
+.product-table th {
+  border: 1px solid black;
+}

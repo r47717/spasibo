@@ -1,0 +1,65 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  height: 50px;
+  background: #eeeeee;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-grow: 1;
+}
+
+aside {
+  min-width: 8em;
+  background: #dddddd;
+  display: flex;
+  flex-direction: column;
+}
+
+aside a {
+  padding: 0.5em 0;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+}
+
+aside a:hover {
+  background: #cccccc;
+}
+
+main {
+  width: 100%;
+  padding: 1em;
+}
+
+footer {
+  height: 40px;
+  box-sizing: border-box;
+  background: #cccccc;
+  padding: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
