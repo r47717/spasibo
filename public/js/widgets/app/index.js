@@ -1,6 +1,6 @@
 import homePage from "./pages/home-page.js";
 import productPage from "./pages/product-page.js";
-import cartPage, { cart } from "./pages/cart-page.js";
+import cartPage from "./pages/cart-page.js";
 import aboutPage from "./pages/about-page.js";
 import notFound from "./pages/404.js";
 
