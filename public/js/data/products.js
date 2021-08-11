@@ -28,6 +28,6 @@ const products = [
 
 export function getProducts() {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(products), 1000);
+    setTimeout(() => resolve(products), 500);
   });
 }

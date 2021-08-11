@@ -28,7 +28,9 @@ export class EventEmitter {
     }
   }
 
-  execute(event, ...params) {
+  emit(event, ...params) {
+    console.log(`Event ${event} emitted`, params);
+
     for (const listener of this.listeners) {
       const [registeredEvent, cb] = listener;
       if (event === registeredEvent || registeredEvent === "*") {

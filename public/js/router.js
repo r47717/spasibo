@@ -1,27 +1,30 @@
-import { EventEmitter } from "./utils/events.js";
-import components from "./widgets.js";
+import widgets from "./widgets.js";
+import { events } from "./events.js";
 
-const events = new EventEmitter();
-
-for (const component of components) {
-  events.subscribeAll(component);
+for (const widget of widgets) {
+  events.subscribeAll(widget);
 }
 
 const routes = [
   {
     pattern: "/",
     regex: /^\/$/g,
-    event: "HOME_PAGE",
+    event: "ROUTER_HOME_PAGE",
   },
   {
     pattern: "/products/:id",
     regex: /^\/products\/(\w+)$/,
-    event: "PRODUCT_PAGE",
+    event: "ROUTER_PRODUCT_PAGE",
+  },
+  {
+    pattern: "/cart",
+    regex: /^\/cart$/,
+    event: "ROUTER_CART_PAGE",
   },
   {
     pattern: "/about",
     regex: /^\/about$/,
-    event: "ABOUT_PAGE",
+    event: "ROUTER_ABOUT_PAGE",
   },
 ];
 
@@ -31,7 +34,7 @@ export function router() {
   for (const route of routes) {
     const match = pathname.match(route.regex);
     if (match) {
-      events.execute(route.event, match);
+      events.emit(route.event, match);
       return;
     }
   }
@@ -44,5 +47,5 @@ export function redirect(url) {
 }
 
 export function redirect404() {
-  events.execute("404");
+  events.emit("ROUTER_404");
 }

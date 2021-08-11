@@ -5,12 +5,19 @@ export function header(id) {
 }
 
 export function productInfo(product) {
-  const ul = html("ul");
+  const ul = html.ul();
   ul.append(
-    html("li", `ID: ${product.id}`),
-    html("li", `Name: ${product.name}`),
-    html("li", `Price: ${product.price}`)
+    html.li(`ID: ${product.id}`),
+    html.li(`Name: ${product.name}`),
+    html.li(`Price: ${product.price}`)
   );
 
   return ul;
+}
+
+export function addToCardButton(onclick) {
+  const elem = html.button("Add to Cart");
+  elem.onclick = onclick;
+
+  return elem;
 }

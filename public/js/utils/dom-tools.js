@@ -26,8 +26,29 @@ export const html = (tag, text, classesList) => {
   return elem;
 };
 
+const tags = [
+  "div",
+  "ul",
+  "li",
+  "a",
+  "table",
+  "tbody",
+  "thead",
+  "tr",
+  "th",
+  "td",
+  "h1",
+  "h2",
+  "h3",
+  "button",
+];
+
+tags.forEach((tag) => {
+  html[tag] = (text, classesList) => html(tag, text, classesList);
+});
+
 export const link = (href, title) => {
-  const a = html("a", title);
+  const a = html.a(title);
   a.setAttribute("href", href);
   return a;
 };

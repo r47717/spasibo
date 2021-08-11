@@ -2,24 +2,43 @@ import { spaLink } from "../utils/dom-tools.js";
 
 export const menu = document.getElementById("menu");
 
+let cartSize = 0;
+
 menu.cleanUp = () => {
   menu.textContent = "";
 };
 
-export default function render(event, ...params) {
-  menu.cleanUp();
+function cartTitle() {
+  return cartSize > 0 ? `Cart (${cartSize})` : "Cart";
+}
 
+export default function render(event, ...params) {
   const home = spaLink("/", "Home");
+  const cart = spaLink("/cart", cartTitle());
   const about = spaLink("/about", "About");
 
-  menu.append(home, about);
-
-  switch (event) {
-    case "HOME_PAGE":
+  const eventHandlers = {
+    ROUTER_HOME_PAGE: () => {
       home.classList.add("selected");
-      break;
-    case "ABOUT_PAGE":
+    },
+    ROUTER_CART_PAGE: () => {
+      cart.classList.add("selected");
+    },
+    ROUTER_ABOUT_PAGE: () => {
       about.classList.add("selected");
-      break;
+    },
+    ROUTER_PRODUCT_PAGE: () => {
+      /* noop */
+    },
+    CART_CONTENT_UPDATE: (cartContent) => {
+      cartSize = cartContent.length;
+      cart.innerHTML = cartTitle();
+    },
+  };
+
+  if (Object.keys(eventHandlers).includes(event)) {
+    menu.cleanUp();
+    menu.append(home, cart, about);
+    eventHandlers[event](...params);
   }
 }
