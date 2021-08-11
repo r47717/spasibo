@@ -3,6 +3,7 @@ import productPage from "./pages/product-page.js";
 import cartPage from "./pages/cart-page.js";
 import aboutPage from "./pages/about-page.js";
 import notFound from "./pages/404.js";
+import { reload } from "../../router.js";
 
 const app = document.getElementById("app");
 
@@ -21,15 +22,21 @@ const pageMap = {
 };
 
 export default function render(event, ...params) {
-  if (pageMap[event]) {
-    activePage = pageMap[event];
-  }
-
-  if (
-    pageMap[event] ||
-    (activePage === cartPage && event === "CART_CONTENT_UPDATE")
-  ) {
-    app.cleanUp();
-    activePage(app, ...params);
+  switch (event) {
+    case "ROUTER_HOME_PAGE":
+    case "ROUTER_PRODUCT_PAGE":
+    case "ROUTER_CART_PAGE":
+    case "ROUTER_ABOUT_PAGE":
+    case "ROUTER_404":
+      if (pageMap[event]) {
+        activePage = pageMap[event];
+        app.cleanUp();
+        activePage(app, ...params);
+      }
+      break;
+    case "CART_CONTENT_UPDATE":
+    case "PRODUCT_ADD_TO_CART":
+      reload();
+      break;
   }
 }

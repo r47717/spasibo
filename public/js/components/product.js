@@ -21,3 +21,10 @@ export function addToCardButton(onclick) {
 
   return elem;
 }
+
+export function goToCardButton(onclick) {
+  const elem = html.button("Go to Cart");
+  elem.onclick = onclick;
+
+  return elem;
+}

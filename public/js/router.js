@@ -44,8 +44,13 @@ export function router() {
 
 export function redirect(url) {
   history.pushState({}, "", url);
+  router();
 }
 
 export function redirect404() {
   events.emit("ROUTER_404");
+}
+
+export function reload() {
+  router();
 }
