@@ -46,7 +46,11 @@ aside a {
 }
 
 aside a:hover {
-  background: #cccccc;
+  color: rgb(172, 127, 231);
+}
+
+aside a.selected {
+  background: #bbbbbb;
 }
 
 main {

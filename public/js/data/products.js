@@ -1,4 +1,4 @@
-export const products = [
+const products = [
   {
     id: 1,
     name: "Product 1",
@@ -25,3 +25,9 @@ export const products = [
     price: 5000,
   },
 ];
+
+export function getProducts() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(products), 1000);
+  });
+}

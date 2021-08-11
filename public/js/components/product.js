@@ -1,5 +1,16 @@
-import { html, spaLink as link } from "../utils/dom-tools.js";
+import { html } from "../utils/dom-tools.js";
 
 export function header(id) {
   return html("h1", `Product ${id}`);
+}
+
+export function productInfo(product) {
+  const ul = html("ul");
+  ul.append(
+    html("li", `ID: ${product.id}`),
+    html("li", `Name: ${product.name}`),
+    html("li", `Price: ${product.price}`)
+  );
+
+  return ul;
 }

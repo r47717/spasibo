@@ -1,42 +1,42 @@
-import { app } from "./components/app.js";
-import homePage from "./pages/home-page.js";
-import productPage from "./pages/product-page.js";
-import aboutPage from "./pages/about-page.js";
-import notFound from "./pages/404.js";
+import { EventEmitter } from "./utils/events.js";
+import components from "./widgets.js";
+
+const events = new EventEmitter();
+
+for (const component of components) {
+  events.subscribeAll(component);
+}
+
+const routes = [
+  {
+    pattern: "/",
+    regex: /^\/$/g,
+    event: "HOME_PAGE",
+  },
+  {
+    pattern: "/products/:id",
+    regex: /^\/products\/(\w+)$/,
+    event: "PRODUCT_PAGE",
+  },
+  {
+    pattern: "/about",
+    regex: /^\/about$/,
+    event: "ABOUT_PAGE",
+  },
+];
 
 export function router() {
   const { pathname } = window.location;
 
-  app.cleanUp();
-
-  const routes = [
-    {
-      pattern: "/",
-      regex: /^\/$/g,
-      page: homePage,
-    },
-    {
-      pattern: "/products/:id",
-      regex: /^\/products\/(\w+)$/,
-      page: productPage,
-    },
-
-    {
-      pattern: "/about",
-      regex: /^\/about$/,
-      page: aboutPage,
-    },
-  ];
-
   for (const route of routes) {
     const match = pathname.match(route.regex);
     if (match) {
-      route.page(app, match);
+      events.execute(route.event, match);
       return;
     }
   }
 
-  notFound(app);
+  redirect404();
 }
 
 export function redirect(url) {
@@ -44,6 +44,5 @@ export function redirect(url) {
 }
 
 export function redirect404() {
-  app.cleanUp();
-  notFound(app);
+  events.execute("404");
 }
