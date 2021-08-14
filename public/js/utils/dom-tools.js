@@ -2,6 +2,10 @@ import { router } from "../router.js";
 
 export const create = document.createElement.bind(document);
 
+export const cleanUp = (element) => {
+  element.textContent = "";
+};
+
 export const classes = (elem, classes) => {
   if (typeof classes === "string") {
     classes = classes.split(/\s+/);

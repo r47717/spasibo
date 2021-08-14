@@ -34,11 +34,14 @@ header {
 aside {
   min-width: 8em;
   background: #dddddd;
+}
+
+aside .menu-widget {
   display: flex;
   flex-direction: column;
 }
 
-aside a {
+aside .menu-widget a {
   padding: 0.5em 0;
   text-decoration: none;
   color: black;

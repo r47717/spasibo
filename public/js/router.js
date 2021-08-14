@@ -1,9 +1,4 @@
-import widgets from "./widgets.js";
 import { events } from "./events.js";
-
-for (const widget of widgets) {
-  events.subscribeAll(widget);
-}
 
 const routes = [
   {
