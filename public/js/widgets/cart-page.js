@@ -1,13 +1,15 @@
 import { html } from "../utils/dom-tools.js";
-import { header, cartList } from "../components/cart.js";
+import { header, cartList, buildCheckoutButton } from "../components/cart.js";
 import { events } from "../events.js";
+import { redirect } from "../router.js";
 
 // Widget props:
 
 let mount;
 let widget;
 let cartContent;
-const cart = [];
+let checkoutButton;
+let cart = [];
 
 // Widget init:
 
@@ -19,6 +21,9 @@ export default (param) => {
   cartContent = getCartContent();
   widget.append(cartContent);
 
+  checkoutButton = buildCheckoutButton();
+  checkoutButton.onclick = () => redirect("/checkout");
+
   events.subscribeAll(messages);
 };
 
@@ -29,7 +34,6 @@ function getCartContent() {
 
       if (index >= 0) {
         cart.splice(index, 1);
-        console.log("Cart: product removed");
         events.emit("CART_CONTENT_UPDATE", cart);
       }
     },
@@ -44,6 +48,14 @@ function updateCartContent() {
   }
 }
 
+function updateCheckoutButton() {
+  if (widget.contains(checkoutButton)) widget.removeChild(checkoutButton);
+
+  if (cart.length !== 0) {
+    widget.append(checkoutButton);
+  }
+}
+
 // Widget event loop:
 
 function messages(event, ...params) {
@@ -55,16 +67,22 @@ function messages(event, ...params) {
     case "ROUTER_PRODUCT_PAGE":
     case "ROUTER_ABOUT_PAGE":
     case "ROUTER_404":
+    case "ROUTER_CHECKOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
       if (mount.contains(widget)) mount.removeChild(widget);
       break;
 
     case "CART_CONTENT_UPDATE":
       updateCartContent();
+      updateCheckoutButton();
       break;
     case "PRODUCT_ADD_TO_CART":
       const product = params[0];
       cart.push(product);
-      console.log("Cart: new product added", cart);
+      events.emit("CART_CONTENT_UPDATE", cart);
+      break;
+    case "CLEAR_CART":
+      cart = [];
       events.emit("CART_CONTENT_UPDATE", cart);
       break;
   }

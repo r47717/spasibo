@@ -1,4 +1,5 @@
 import { html } from "../utils/dom-tools.js";
+import { getHeader, getOrderText } from "../components/ordered.js";
 import { events } from "../events.js";
 
 // Widget props:
@@ -9,33 +10,27 @@ let widget;
 // Widget init:
 
 export default (param) => {
-  console.log("about page widget initialized");
   mount = param;
 
   widget = html.div();
-  widget.append(html.h1("About"));
-  widget.append(
-    html.div(
-      "ESM based Vanilla JavaScript single page application with zero node_modules and no webpack"
-    )
-  );
+  widget.append(getHeader(), getOrderText());
 
-  events.subscribeAll(render);
+  events.subscribeAll(messages);
 };
 
 // Widget event loop:
 
-function render(event, ...params) {
+function messages(event, ...params) {
   switch (event) {
-    case "ROUTER_ABOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
       mount.append(widget);
       break;
     case "ROUTER_HOME_PAGE":
     case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_CART_PAGE":
+    case "ROUTER_ABOUT_PAGE":
     case "ROUTER_404":
+    case "ROUTER_CART_PAGE":
     case "ROUTER_CHECKOUT_PAGE":
-    case "ROUTER_ORDERED_PAGE":
       if (mount.contains(widget)) mount.removeChild(widget);
       break;
   }

@@ -28,7 +28,9 @@ export default function render(event, ...params) {
     case "ROUTER_HOME_PAGE":
     case "ROUTER_PRODUCT_PAGE":
     case "ROUTER_CART_PAGE":
-      mount.removeChild(widget);
+    case "ROUTER_CHECKOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
+      if (mount.contains(wodget)) mount.removeChild(widget);
       break;
     case "CART_CONTENT_UPDATE":
     case "PRODUCT_ADD_TO_CART":

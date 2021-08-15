@@ -50,6 +50,8 @@ function render(event, ...params) {
       break;
     case "ROUTER_PRODUCT_PAGE":
     case "ROUTER_404":
+    case "ROUTER_CHECKOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
       [home, cart, about].forEach((page) => page.classList.remove("selected"));
       break;
 

@@ -20,3 +20,7 @@ export function cartList(cart, { remove }) {
 
   return ul;
 }
+
+export function buildCheckoutButton() {
+  return html.button("Checkout");
+}

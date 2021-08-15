@@ -17,6 +17,16 @@ const routes = [
     event: "ROUTER_CART_PAGE",
   },
   {
+    pattern: "/checkout",
+    regex: /^\/checkout$/,
+    event: "ROUTER_CHECKOUT_PAGE",
+  },
+  {
+    pattern: "/ordered",
+    regex: /^\/ordered$/,
+    event: "ROUTER_ORDERED_PAGE",
+  },
+  {
     pattern: "/about",
     regex: /^\/about$/,
     event: "ROUTER_ABOUT_PAGE",

@@ -41,6 +41,8 @@ function messages(event, ...params) {
     case "ROUTER_PRODUCT_PAGE":
     case "ROUTER_CART_PAGE":
     case "ROUTER_404":
+    case "ROUTER_CHECKOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
       if (mount.contains(widget)) mount.removeChild(widget);
       break;
 

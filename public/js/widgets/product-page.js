@@ -8,13 +8,25 @@ import { getProducts } from "../data/products.js";
 import { redirect, redirect404 } from "../router.js";
 import { loading } from "../components/loading.js";
 import { events } from "../events.js";
-// import { cart } from "./cart-page.js";
 import { html } from "../utils/dom-tools.js";
 
 // Widget props:
 
 let mount;
 let widget;
+let id;
+let product;
+let button;
+
+const buttonGoToCart = goToCardButton(() => {
+  redirect("/cart");
+});
+
+const buttonAddToCart = addToCardButton(() => {
+  events.emit("PRODUCT_ADD_TO_CART", { ...product });
+});
+
+let cart = [];
 
 // Widget init:
 
@@ -26,7 +38,7 @@ export default (param) => {
 };
 
 function loadProduct(data) {
-  const id = data[1];
+  const productId = +data[1];
 
   const loadingIndicator = loading();
 
@@ -37,29 +49,35 @@ function loadProduct(data) {
   getProducts().then((products) => {
     if (widget.contains(loadingIndicator)) {
       widget.removeChild(loadingIndicator);
-      const product = products.find((item) => item.id === +id);
-      if (!product) {
+      const foundProduct = products.find((item) => item.id === productId);
+      if (!foundProduct) {
         redirect404();
       } else {
+        id = productId;
+        product = foundProduct;
         widget.append(header(id));
         widget.append(productInfo(product));
-        // console.log(cart);
-        // if (cart.some((product) => product.id === +id)) {
-        //   widget.append(
-        //     goToCardButton(() => {
-        //       redirect("/cart");
-        //     })
-        //   );
-        // } else {
-        widget.append(
-          addToCardButton(() => {
-            events.emit("PRODUCT_ADD_TO_CART", { ...product });
-          })
-        );
-        // }
+
+        button = cart.some((product) => product.id === +id)
+          ? buttonGoToCart
+          : buttonAddToCart;
+
+        widget.append(button);
       }
     }
   });
+}
+
+function updateButton() {
+  if (widget.contains(button)) {
+    widget.removeChild(button);
+
+    button = cart.some((product) => product.id === +id)
+      ? buttonGoToCart
+      : buttonAddToCart;
+
+    widget.append(button);
+  }
 }
 
 // Widget event loop:
@@ -73,9 +91,14 @@ function messages(event, ...params) {
     case "ROUTER_CART_PAGE":
     case "ROUTER_404":
     case "ROUTER_ABOUT_PAGE":
+    case "ROUTER_CHECKOUT_PAGE":
+    case "ROUTER_ORDERED_PAGE":
       if (mount.contains(widget)) mount.removeChild(widget);
       break;
     case "CART_CONTENT_UPDATE":
+      cart = params[0];
+      updateButton();
+
     case "PRODUCT_ADD_TO_CART":
       break;
   }
