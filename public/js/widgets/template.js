@@ -1,4 +1,5 @@
 import { html } from "../../../utils/dom-tools.js";
+import { events } from "../events.js";
 
 // Widget props:
 
@@ -7,27 +8,28 @@ let widget;
 
 // Widget init:
 
-const onInit = (mount) => {
-  mount = mount;
+export default function (param) {
+  mount = param;
 
   widget = html.div();
   widget.append(html.h1("About"));
   widget.append(html.div("template"));
+
+  events.subscribeAll(messages)
 };
 
-// Widget event loop:
+init.activate = () => {
+  mount.append(widget);
+}
 
-export default function render(event, ...params) {
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
+}
+
+// Widget event processing:
+
+export default function messages(event, ...params) {
   switch (event) {
-    case "ROUTER_ABOUT_PAGE":
-      mount.append(widget);
-      break;
-    case "ROUTER_HOME_PAGE":
-    case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_CART_PAGE":
-    case "ROUTER_404":
-      mount.removeChild(widget);
-      break;
     case "CART_CONTENT_UPDATE":
     case "PRODUCT_ADD_TO_CART":
       break;

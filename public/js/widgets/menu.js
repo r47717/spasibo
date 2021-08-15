@@ -13,7 +13,7 @@ let cartSize = 0;
 
 // Widget init:
 
-export default (param) => {
+export default function init(param) {
   mount = param;
 
   home = spaLink("/", "Home");
@@ -25,16 +25,24 @@ export default (param) => {
 
   mount.append(widget);
 
-  events.subscribeAll(render);
+  events.subscribeAll(messages);
+}
+
+init.activate = () => {
+  mount.append(widget);
+};
+
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
 };
 
 function cartTitle() {
   return cartSize > 0 ? `Cart (${cartSize})` : "Cart";
 }
 
-// Widget event loop:
+// Widget event processing:
 
-function render(event, ...params) {
+function messages(event, ...params) {
   switch (event) {
     case "ROUTER_ABOUT_PAGE":
       [home, cart].forEach((page) => page.classList.remove("selected"));

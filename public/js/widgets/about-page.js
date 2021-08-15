@@ -8,7 +8,7 @@ let widget;
 
 // Widget init:
 
-export default (param) => {
+export default function init(param) {
   console.log("about page widget initialized");
   mount = param;
 
@@ -20,23 +20,17 @@ export default (param) => {
     )
   );
 
-  events.subscribeAll(render);
+  events.subscribeAll(messages);
+}
+
+init.activate = () => {
+  mount.append(widget);
 };
 
-// Widget event loop:
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
+};
 
-function render(event, ...params) {
-  switch (event) {
-    case "ROUTER_ABOUT_PAGE":
-      mount.append(widget);
-      break;
-    case "ROUTER_HOME_PAGE":
-    case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_CART_PAGE":
-    case "ROUTER_404":
-    case "ROUTER_CHECKOUT_PAGE":
-    case "ROUTER_ORDERED_PAGE":
-      if (mount.contains(widget)) mount.removeChild(widget);
-      break;
-  }
-}
+// Widget event processing:
+
+function messages(event, ...params) {}

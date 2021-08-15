@@ -13,7 +13,7 @@ let cart = [];
 
 // Widget init:
 
-export default (param) => {
+export default function init(param) {
   mount = param;
 
   widget = html.div();
@@ -25,6 +25,14 @@ export default (param) => {
   checkoutButton.onclick = () => redirect("/checkout");
 
   events.subscribeAll(messages);
+}
+
+init.activate = () => {
+  mount.append(widget);
+};
+
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
 };
 
 function getCartContent() {
@@ -56,22 +64,10 @@ function updateCheckoutButton() {
   }
 }
 
-// Widget event loop:
+// Widget event processing:
 
 function messages(event, ...params) {
   switch (event) {
-    case "ROUTER_CART_PAGE":
-      mount.append(widget);
-      break;
-    case "ROUTER_HOME_PAGE":
-    case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_ABOUT_PAGE":
-    case "ROUTER_404":
-    case "ROUTER_CHECKOUT_PAGE":
-    case "ROUTER_ORDERED_PAGE":
-      if (mount.contains(widget)) mount.removeChild(widget);
-      break;
-
     case "CART_CONTENT_UPDATE":
       updateCartContent();
       updateCheckoutButton();

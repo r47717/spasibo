@@ -1,8 +1,5 @@
-export default function (app) {
-  app.append(html("div", "404 - Not Found"));
-}
-
-import { html } from "../../../utils/dom-tools.js";
+import { html } from "../utils/dom-tools.js";
+import { events } from "../events.js";
 
 // Widget props:
 
@@ -11,29 +8,23 @@ let widget;
 
 // Widget init:
 
-export const onInit = (mount) => {
-  mount = mount;
+export default function init(param) {
+  mount = param;
 
   widget = html.div();
   widget.append(html("div", "404 - Not Found"));
+
+  events.subscribeAll(messages);
+}
+
+init.activate = () => {
+  mount.append(widget);
 };
 
-// Widget event loop:
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
+};
 
-export default function render(event, ...params) {
-  switch (event) {
-    case "ROUTER_404":
-      mount.append(widget);
-    case "ROUTER_ABOUT_PAGE":
-    case "ROUTER_HOME_PAGE":
-    case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_CART_PAGE":
-    case "ROUTER_CHECKOUT_PAGE":
-    case "ROUTER_ORDERED_PAGE":
-      if (mount.contains(wodget)) mount.removeChild(widget);
-      break;
-    case "CART_CONTENT_UPDATE":
-    case "PRODUCT_ADD_TO_CART":
-      break;
-  }
-}
+// Widget event processing:
+
+function messages(event, ...params) {}

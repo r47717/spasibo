@@ -9,29 +9,23 @@ let widget;
 
 // Widget init:
 
-export default (param) => {
+export default function init(param) {
   mount = param;
 
   widget = html.div();
   widget.append(getHeader(), getOrderText());
 
   events.subscribeAll(messages);
+}
+
+init.activate = () => {
+  mount.append(widget);
 };
 
-// Widget event loop:
+init.deactivate = () => {
+  if (mount.contains(widget)) mount.removeChild(widget);
+};
 
-function messages(event, ...params) {
-  switch (event) {
-    case "ROUTER_ORDERED_PAGE":
-      mount.append(widget);
-      break;
-    case "ROUTER_HOME_PAGE":
-    case "ROUTER_PRODUCT_PAGE":
-    case "ROUTER_ABOUT_PAGE":
-    case "ROUTER_404":
-    case "ROUTER_CART_PAGE":
-    case "ROUTER_CHECKOUT_PAGE":
-      if (mount.contains(widget)) mount.removeChild(widget);
-      break;
-  }
-}
+// Widget event processing:
+
+function messages(event, ...params) {}
