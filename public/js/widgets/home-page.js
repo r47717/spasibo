@@ -8,6 +8,7 @@ import { events } from "../events.js";
 
 let mount;
 let widget;
+let productList;
 
 // Widget init:
 
@@ -20,14 +21,24 @@ export default function init(param) {
   widget.append(loadingIndicator);
 
   getProducts().then((products) => {
+    productList = products;
     if (widget.contains(loadingIndicator)) {
       widget.removeChild(loadingIndicator);
       widget.append(header());
-      widget.append(table(products));
+      widget.append(table(products, setFavorite));
     }
   });
 
   events.subscribeAll(messages);
+}
+
+function setFavorite(id, fav) {
+  const product = productList.find((pr) => pr.id === id);
+  if (product) {
+    product.favorite = fav;
+  }
+
+  events.emit("PRODUCT_CHANGE_FAVORITE", product);
 }
 
 init.activate = () => {

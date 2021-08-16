@@ -8,7 +8,10 @@ let widget;
 let home;
 let cart;
 let about;
+let favoriteElements = [];
 
+let favoriteDelimiter;
+let favoriteProducts = [];
 let cartSize = 0;
 
 // Widget init:
@@ -19,6 +22,8 @@ export default function init(param) {
   home = spaLink("/", "Home");
   cart = spaLink("/cart", cartTitle());
   about = spaLink("/about", "About");
+
+  favoriteDelimiter = html.div("", "delimiter");
 
   widget = html.div("", "menu-widget");
   widget.append(home, cart, about);
@@ -38,6 +43,30 @@ init.deactivate = () => {
 
 function cartTitle() {
   return cartSize > 0 ? `Cart (${cartSize})` : "Cart";
+}
+
+function updateFavorites() {
+  favoriteElements.forEach((favorite) => {
+    if (widget.contains(favorite)) {
+      widget.removeChild(favorite);
+    }
+  });
+
+  if (widget.contains(favoriteDelimiter)) {
+    widget.removeChild(favoriteDelimiter);
+  }
+
+  favoriteElements = [];
+  favoriteProducts.forEach((favorite) => {
+    if (favorite.favorite) {
+      const elem = spaLink(`/products/${favorite.id}`, favorite.name);
+      favoriteElements.push(elem);
+    }
+  });
+
+  if (favoriteElements.length > 0) {
+    widget.append(favoriteDelimiter, ...favoriteElements);
+  }
 }
 
 // Widget event processing:
@@ -64,9 +93,21 @@ function messages(event, ...params) {
       break;
 
     case "CART_CONTENT_UPDATE":
-      cartSize = params[0].length;
+      const newCart = params[0];
+      cartSize = newCart.length;
       cart.innerHTML = cartTitle();
     case "PRODUCT_ADD_TO_CART":
+      break;
+    case "PRODUCT_CHANGE_FAVORITE":
+      const [product] = params;
+      const found = favoriteProducts.find((pr) => pr.id === product.id);
+      if (found) {
+        found.favorite = product.favorite;
+      } else {
+        favoriteProducts.push({ ...product });
+      }
+      console.log(favoriteProducts);
+      updateFavorites();
       break;
   }
 }

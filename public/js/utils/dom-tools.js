@@ -45,6 +45,7 @@ const tags = [
   "h2",
   "h3",
   "button",
+  "input",
 ];
 
 tags.forEach((tag) => {
@@ -66,4 +67,12 @@ export const spaLink = (href, title) => {
   };
 
   return a;
+};
+
+html.checkbox = (checked) => {
+  const elem = html.input();
+  elem.setAttribute("type", "checkbox");
+  elem.checked = checked;
+
+  return elem;
 };

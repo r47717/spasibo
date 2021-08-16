@@ -9,3 +9,9 @@
 .product-table th {
   border: 1px solid black;
 }
+
+.delimiter {
+  width: 100%;
+  border-top: 1px solid #bbbbbb;
+  margin: 20px 0;
+}
